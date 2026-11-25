@@ -1,0 +1,7 @@
+.env
+*.local
+backend/bin/
+node_modules/
+dist/
+*.exe
+.impeccable/
