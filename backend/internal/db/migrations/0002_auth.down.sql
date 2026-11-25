@@ -1,0 +1,3 @@
+DROP TABLE IF EXISTS sessions;
+DROP TABLE IF EXISTS otp_codes;
+ALTER TABLE users DROP COLUMN IF EXISTS pin_locked_until, DROP COLUMN IF EXISTS pin_failed;

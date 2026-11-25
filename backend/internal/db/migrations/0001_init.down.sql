@@ -1,0 +1,6 @@
+DROP TABLE IF EXISTS audit_log;
+DROP TABLE IF EXISTS reports;
+DROP TABLE IF EXISTS transfer_legs;
+DROP TABLE IF EXISTS transfers;
+DROP TABLE IF EXISTS linked_accounts;
+DROP TABLE IF EXISTS users;
