@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: apapo
+      POSTGRES_PASSWORD: apapo
+      POSTGRES_DB: apapo
+    # No host port: the API reaches the database on the compose network, and
+    # publishing 5432 clashes with a Postgres already running on the host.
+    # Use `docker compose exec db psql -U apapo` to look inside.
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U apapo"]
+      interval: 3s
+      retries: 10
+  api:
+    build: ./backend
+    environment:
+      ADDR: ":8080"
+      DATABASE_URL: postgres://apapo:apapo@db:5432/apapo?sslmode=disable
+      PROVIDER: mock
+      # Development only. Override from the shell for anything else; never reuse these outside a demo.
+      APP_SECRET: ${APP_SECRET:-demo-only-secret-change-me-please}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY:-}
+      DEV_OTP: ${DEV_OTP:-123456}
+    ports: ["${API_PORT:-8080}:8080"]
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/healthz"]
+      interval: 3s
+      retries: 10
+    depends_on:
+      db:
+        condition: service_healthy
